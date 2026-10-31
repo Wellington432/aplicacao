@@ -1,0 +1,242 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { AlertTriangle, Plus, Pencil, Trash2, Undo2, Package } from 'lucide-react'
+import AdminShell from '@/components/admin/AdminShell'
+import ProdutoFormModal from '@/components/admin/ProdutoFormModal'
+import { api, getApiErrorMessage } from '@/lib/api'
+import { Categoria, Produto } from '@/lib/types'
+import { formatPrice } from '@/lib/format'
+
+const ESTOQUE_BAIXO_LIMIAR = 10
+
+export default function AdminProdutosPage() {
+  const [produtos, setProdutos] = useState<Produto[]>([])
+  const [categorias, setCategorias] = useState<Categoria[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editing, setEditing] = useState<Produto | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [togglingId, setTogglingId] = useState<string | null>(null)
+
+  async function carregar() {
+    setLoading(true)
+    setError('')
+    try {
+      const [produtosRes, categoriasRes] = await Promise.all([
+        api.get<Produto[]>('/listproduto?todos=1'),
+        api.get<Categoria[]>('/listcategoria'),
+      ])
+      setProdutos(produtosRes.data)
+      setCategorias(categoriasRes.data)
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Não foi possível carregar os produtos.'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    carregar()
+  }, [])
+
+  function abrirNovo() {
+    setEditing(null)
+    setModalOpen(true)
+  }
+
+  function abrirEdicao(produto: Produto) {
+    setEditing(produto)
+    setModalOpen(true)
+  }
+
+  function fecharModal() {
+    setModalOpen(false)
+    setEditing(null)
+  }
+
+  function onSaved() {
+    fecharModal()
+    carregar()
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm('Desativar este produto? Ele deixa de aparecer na loja, mas o histórico de pedidos é preservado.')) return
+    setDeletingId(id)
+    setError('')
+    try {
+      await api.delete('/deletaproduto', { data: { id } })
+      await carregar()
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Não foi possível desativar o produto.'))
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  async function handleReativar(produto: Produto) {
+    setTogglingId(produto.id)
+    setError('')
+    try {
+      const formData = new FormData()
+      formData.append('id', produto.id)
+      formData.append('nome', produto.nome)
+      formData.append('preco', produto.preco)
+      formData.append('unidade', produto.unidade)
+      formData.append('descricao', produto.descricao)
+      formData.append('id_categoria', produto.id_categoria ?? produto.categoria?.id ?? '')
+      formData.append('estoque', String(produto.estoque))
+      formData.append('ativo', 'true')
+      await api.put('/atualizaproduto', formData)
+      await carregar()
+    } catch (err) {
+      setError(getApiErrorMessage(err, 'Não foi possível reativar o produto.'))
+    } finally {
+      setTogglingId(null)
+    }
+  }
+
+  return (
+    <AdminShell title="Produtos">
+      {error && (
+        <div className="flex items-center gap-2 p-3 rounded-input bg-brand-red/10 border border-brand-red/25 text-brand-red text-sm">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          {error}
+        </div>
+      )}
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={abrirNovo}
+          disabled={categorias.length === 0}
+          className="h-11 px-5 rounded-input bg-horta-dark text-white text-sm font-semibold flex items-center gap-2 hover:bg-horta-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Plus className="w-4 h-4" />
+          Novo produto
+        </button>
+      </div>
+
+      {!loading && categorias.length === 0 && (
+        <p className="text-sm text-brand-red">
+          Cadastre ao menos uma categoria antes de criar produtos.
+        </p>
+      )}
+
+      {loading && (
+        <div className="space-y-2">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="h-16 bg-white rounded-card border border-card-border animate-pulse" />
+          ))}
+        </div>
+      )}
+
+      {!loading && produtos.length === 0 && (
+        <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+          <Package className="w-10 h-10 text-ink-300" />
+          <p className="text-ink-400 text-sm">Nenhum produto cadastrado ainda.</p>
+        </div>
+      )}
+
+      {!loading && produtos.length > 0 && (
+        <div className="bg-white rounded-card border border-card-border shadow-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] text-sm">
+              <caption className="sr-only">Produtos cadastrados</caption>
+              <thead>
+                <tr className="text-left text-ink-400 text-xs border-b border-card-border">
+                  <th scope="col" className="font-medium px-4 py-3">Produto</th>
+                  <th scope="col" className="font-medium px-4 py-3">Categoria</th>
+                  <th scope="col" className="font-medium px-4 py-3 text-right">Preço</th>
+                  <th scope="col" className="font-medium px-4 py-3 text-right">Estoque</th>
+                  <th scope="col" className="font-medium px-4 py-3 text-right">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {produtos.map((produto) => (
+                  <tr
+                    key={produto.id}
+                    className={`border-b border-card-border last:border-0 ${!produto.ativo ? 'opacity-50' : ''}`}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-10 h-10 rounded-input overflow-hidden bg-bg-app shrink-0">
+                          {produto.banner && (
+                            <Image src={produto.banner} alt={produto.nome} fill className="object-cover" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-ink-800 truncate max-w-[160px] sm:max-w-[240px]">
+                            {produto.nome}
+                            {!produto.ativo && (
+                              <span className="ml-2 inline-block px-1.5 py-0.5 rounded-input bg-ink-100 text-ink-500 text-[10px] font-semibold align-middle">
+                                Inativo
+                              </span>
+                            )}
+                          </p>
+                          <p className="text-xs text-ink-400">{produto.unidade}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-ink-600">{produto.categoria?.nome ?? '—'}</td>
+                    <td className="px-4 py-3 text-right font-medium text-horta-dark">
+                      {formatPrice(produto.preco)}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <span
+                        className={`font-medium tabular-nums ${
+                          produto.estoque <= ESTOQUE_BAIXO_LIMIAR ? 'text-brand-red' : 'text-ink-700'
+                        }`}
+                      >
+                        {produto.estoque}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          type="button"
+                          onClick={() => abrirEdicao(produto)}
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-ink-500 hover:bg-bg-app transition-colors"
+                          aria-label={`Editar ${produto.nome}`}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        {produto.ativo ? (
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(produto.id)}
+                            disabled={deletingId === produto.id}
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-brand-red hover:bg-brand-red/10 transition-colors disabled:opacity-50"
+                            aria-label={`Desativar ${produto.nome}`}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleReativar(produto)}
+                            disabled={togglingId === produto.id}
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-horta-dark hover:bg-horta-dark/10 transition-colors disabled:opacity-50"
+                            aria-label={`Reativar ${produto.nome}`}
+                          >
+                            <Undo2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {modalOpen && (
+        <ProdutoFormModal categorias={categorias} produto={editing} onClose={fecharModal} onSaved={onSaved} />
+      )}
+    </AdminShell>
+  )
+}

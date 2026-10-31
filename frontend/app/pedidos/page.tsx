@@ -1,0 +1,121 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { AlertTriangle, PackageOpen } from 'lucide-react'
+import AppShell from '@/components/AppShell'
+import { api, getApiErrorMessage } from '@/lib/api'
+import { Compra, StatusCompra } from '@/lib/types'
+import { formatPrice } from '@/lib/format'
+
+const STATUS_LABEL: Record<StatusCompra, string> = {
+  CARRINHO: 'No carrinho',
+  AGUARDANDO_PAGAMENTO: 'Aguardando pagamento',
+  AGUARDANDO_CONFIRMACAO: 'Em análise',
+  PAGO: 'Pago',
+  REJEITADO: 'Comprovante recusado',
+  CANCELADO: 'Cancelado',
+}
+
+const STATUS_COLOR: Record<StatusCompra, string> = {
+  CARRINHO: 'bg-ink-100 text-ink-600',
+  AGUARDANDO_PAGAMENTO: 'bg-brand-yellow/20 text-yellow-700',
+  AGUARDANDO_CONFIRMACAO: 'bg-brand-yellow/20 text-yellow-700',
+  PAGO: 'bg-horta-medium/15 text-horta-dark',
+  REJEITADO: 'bg-brand-red/10 text-brand-red',
+  CANCELADO: 'bg-brand-red/10 text-brand-red',
+}
+
+// Pedidos nesses status ainda precisam de uma ação do cliente na tela de pagamento.
+const PRECISA_PAGAR: StatusCompra[] = ['AGUARDANDO_PAGAMENTO', 'REJEITADO']
+
+function PedidoSkeleton() {
+  return (
+    <div className="bg-white rounded-card border border-card-border shadow-card p-4 space-y-3">
+      <div className="h-4 w-32 bg-ink-100 rounded animate-pulse" />
+      <div className="h-3 w-48 bg-ink-100 rounded animate-pulse" />
+    </div>
+  )
+}
+
+export default function PedidosPage() {
+  const [pedidos, setPedidos] = useState<Compra[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    api
+      .get<Compra[]>('/meuspedidos')
+      .then(({ data }) => setPedidos(data))
+      .catch((err) => setError(getApiErrorMessage(err, 'Não foi possível carregar seus pedidos.')))
+      .finally(() => setLoading(false))
+  }, [])
+
+  return (
+    <AppShell title="Meus pedidos">
+      {error && (
+        <div className="flex items-center gap-2 p-3 rounded-input bg-brand-red/10 border border-brand-red/25 text-brand-red text-sm">
+          <AlertTriangle className="w-4 h-4 shrink-0" />
+          {error}
+        </div>
+      )}
+
+      {loading && (
+        <div className="space-y-3">
+          {[...Array(3)].map((_, i) => (
+            <PedidoSkeleton key={i} />
+          ))}
+        </div>
+      )}
+
+      {!loading && pedidos.length === 0 && !error && (
+        <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+          <PackageOpen className="w-10 h-10 text-ink-300" />
+          <p className="text-ink-400 text-sm">Você ainda não fez nenhum pedido.</p>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        {pedidos.map((pedido) => (
+          <div key={pedido.id} className="bg-white rounded-card border border-card-border shadow-card p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-ink-400">
+                {new Date(pedido.criado_em).toLocaleDateString('pt-BR')}
+              </span>
+              <span
+                className={`text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COLOR[pedido.status] ?? 'bg-ink-100 text-ink-600'}`}
+              >
+                {STATUS_LABEL[pedido.status] ?? pedido.status}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 mt-3 overflow-x-auto">
+              {pedido.itens.map((item) => (
+                <div key={item.id} className="relative w-12 h-12 rounded-input overflow-hidden bg-bg-app shrink-0">
+                  {item.produto.banner && (
+                    <Image src={item.produto.banner} alt={item.produto.nome} fill className="object-cover" />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between mt-3">
+              <span className="text-sm text-ink-500">{pedido.itens.length} item(ns)</span>
+              <span className="font-bold text-horta-dark">{formatPrice(pedido.total)}</span>
+            </div>
+
+            {PRECISA_PAGAR.includes(pedido.status) && (
+              <Link
+                href={`/pagamento/${pedido.id}`}
+                className="mt-3 flex items-center justify-center h-10 rounded-input bg-horta-dark text-white text-sm font-semibold hover:bg-horta-hover transition-colors"
+              >
+                {pedido.status === 'REJEITADO' ? 'Reenviar comprovante' : 'Pagar com Pix'}
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+    </AppShell>
+  )
+}

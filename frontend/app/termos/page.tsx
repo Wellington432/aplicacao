@@ -1,0 +1,28 @@
+import Link from 'next/link'
+import { ArrowLeft, FileText } from 'lucide-react'
+import StaticPageHero from '@/components/StaticPageHero'
+
+export default function TermosPage() {
+  return (
+    <main id="legal-content" tabIndex={-1} className="min-h-screen bg-bg-app px-6 py-10">
+      <a href="#legal-content" className="skip-link">
+        Ir para o conteúdo
+      </a>
+      <div className="max-w-2xl mx-auto">
+        <Link href="/cadastro" className="inline-flex items-center gap-2 text-horta-dark hover:underline mb-6">
+          <ArrowLeft className="w-4 h-4" />
+          Voltar
+        </Link>
+
+        <StaticPageHero icon={FileText} title="Termos de Uso">
+          <p className="text-ink-600 leading-relaxed">
+            Ao usar o FeiraEtec você concorda em fornecer informações verdadeiras no
+            cadastro, utilizar a plataforma apenas para compras legítimas de produtos
+            da Unidade Rural da ETEC Jales e respeitar as políticas de pagamento e
+            entrega descritas no momento da compra.
+          </p>
+        </StaticPageHero>
+      </div>
+    </main>
+  )
+}
