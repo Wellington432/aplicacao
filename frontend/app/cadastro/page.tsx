@@ -62,7 +62,7 @@ export default function CadastroPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-bg-app relative">
+    <div className="relative flex flex-1 flex-col bg-bg-app">
       <LeafWatermark />
       <a href="#auth-main-content" className="skip-link">
         Ir para o conteúdo

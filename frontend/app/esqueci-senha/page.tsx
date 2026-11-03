@@ -30,7 +30,7 @@ export default function EsqueciSenhaPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-bg-app">
+    <div className="flex flex-1 flex-col bg-bg-app">
       <a href="#auth-main-content" className="skip-link">
         Ir para o conteúdo
       </a>

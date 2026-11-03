@@ -95,7 +95,7 @@ function PagamentoContent() {
 
   if (carregando) {
     return (
-      <main id="payment-main-content" tabIndex={-1} className="min-h-screen bg-bg-app flex items-center justify-center">
+      <main id="payment-main-content" tabIndex={-1} className="flex-1 bg-bg-app flex items-center justify-center">
         <a href="#payment-main-content" className="skip-link">
           Ir para o conteúdo
         </a>
@@ -106,7 +106,7 @@ function PagamentoContent() {
 
   if (!pix) {
     return (
-      <main id="payment-main-content" tabIndex={-1} className="min-h-screen bg-bg-app flex flex-col items-center justify-center gap-4 px-6">
+      <main id="payment-main-content" tabIndex={-1} className="flex-1 bg-bg-app flex flex-col items-center justify-center gap-4 px-6">
         <a href="#payment-main-content" className="skip-link">
           Ir para o conteúdo
         </a>
@@ -121,7 +121,7 @@ function PagamentoContent() {
   const podeEnviar = status === 'AGUARDANDO_PAGAMENTO' || status === 'REJEITADO';
 
   return (
-    <main id="payment-main-content" tabIndex={-1} className="min-h-screen bg-bg-app flex items-center justify-center px-6 py-10">
+    <main id="payment-main-content" tabIndex={-1} className="flex-1 bg-bg-app flex items-center justify-center px-6 py-10">
       <a href="#payment-main-content" className="skip-link">
         Ir para o conteúdo
       </a>

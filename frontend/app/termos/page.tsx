@@ -4,7 +4,7 @@ import StaticPageHero from '@/components/StaticPageHero'
 
 export default function TermosPage() {
   return (
-    <main id="legal-content" tabIndex={-1} className="min-h-screen bg-bg-app px-6 py-10">
+    <main id="legal-content" tabIndex={-1} className="flex-1 bg-bg-app px-6 py-10">
       <a href="#legal-content" className="skip-link">
         Ir para o conteúdo
       </a>

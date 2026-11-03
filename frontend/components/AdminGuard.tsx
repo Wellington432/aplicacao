@@ -22,7 +22,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
 
   if (!isHydrated || !isAuthenticated || user?.tipo !== 'ADM') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-app">
+      <div className="flex flex-1 items-center justify-center bg-bg-app">
         <Logo variant="compact" className="animate-pulse" />
       </div>
     )

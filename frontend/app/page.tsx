@@ -12,7 +12,6 @@ import CategoryGrid from '@/components/home/CategoryGrid'
 import ProductCard, { ProductCardSkeleton } from '@/components/home/ProductCard'
 import FilterPanel, { ProductFilters } from '@/components/home/FilterPanel'
 import BenefitsBar from '@/components/home/BenefitsBar'
-import Footer from '@/components/home/Footer'
 import { api, getApiErrorMessage } from '@/lib/api'
 import { Categoria, Produto } from '@/lib/types'
 import { useDebounce } from '@/hooks/useDebounce'
@@ -130,7 +129,7 @@ function HomeContent() {
   )
 
   return (
-    <div className="min-h-screen bg-bg-app pb-20 lg:pb-0">
+    <div className="flex flex-1 flex-col bg-bg-app pb-20 lg:pb-0">
       <a href="#main-content" className="skip-link">
         Ir para o conteúdo
       </a>
@@ -152,12 +151,12 @@ function HomeContent() {
       />
 
       <div
-        className="store-layout mx-auto w-full px-4 sm:px-6 lg:px-8 2xl:px-10"
+        className="store-layout mx-auto w-full flex-1 px-4 sm:px-6 lg:px-8 2xl:px-10"
         data-sidebar-collapsed={collapsed}
       >
         <Sidebar />
 
-        <main id="main-content" tabIndex={-1} className="flex min-w-0 flex-col py-6 lg:py-8 xl:py-10">
+        <main id="main-content" tabIndex={-1} className="flex min-w-0 flex-1 flex-col py-6 lg:py-8 xl:py-10">
           {error && (
             <div className="mb-6 flex items-center gap-2 p-3 rounded-input bg-brand-red/10 border border-brand-red/25 text-brand-red text-sm">
               <AlertTriangle className="w-4 h-4 shrink-0" />
@@ -214,9 +213,6 @@ function HomeContent() {
             <BenefitsBar />
           </div>
 
-          <div className="mt-10 lg:mt-12">
-            <Footer />
-          </div>
         </main>
       </div>
 

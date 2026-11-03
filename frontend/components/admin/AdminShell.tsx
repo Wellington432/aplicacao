@@ -20,11 +20,11 @@ function AdminShellContent({ children, title }: { children: ReactNode; title: st
   const { signOut } = useAuth()
 
   return (
-    <div className="min-h-screen bg-bg-app lg:flex">
+    <div className="flex-1 bg-bg-app lg:flex">
       <a href="#admin-main-content" className="skip-link">
         Ir para o conteúdo
       </a>
-      <aside className="lg:w-64 shrink-0 bg-white border-b lg:border-b-0 lg:border-r border-card-border lg:min-h-screen p-5 flex lg:flex-col gap-6">
+      <aside className="lg:w-64 shrink-0 bg-white border-b lg:border-b-0 lg:border-r border-card-border p-5 flex lg:flex-col gap-6">
         <Link href="/">
           <Logo variant="compact" />
         </Link>

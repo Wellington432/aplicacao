@@ -17,7 +17,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (!isHydrated || !isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-bg-app">
+      <div className="flex flex-1 items-center justify-center bg-bg-app">
         <Logo variant="compact" className="animate-pulse" />
       </div>
     )

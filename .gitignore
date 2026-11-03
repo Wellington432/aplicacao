@@ -52,3 +52,4 @@ dist/
 backend/uploads/*
 !backend/uploads/.gitkeep
 backend/private_uploads/
+.neon

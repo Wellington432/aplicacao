@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import Providers from '@/components/Providers'
+import Footer from '@/components/Footer'
 import './globals.css'
 
 const poppins = Poppins({
@@ -17,8 +18,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={poppins.variable}>
-      <body className="font-sans bg-bg-app text-ink-800 antialiased">
-        <Providers>{children}</Providers>
+      <body className="min-h-screen flex flex-col font-sans bg-bg-app text-ink-800 antialiased">
+        <div className="flex flex-1 flex-col">
+          <Providers>{children}</Providers>
+        </div>
+        <Footer />
       </body>
     </html>
   )
