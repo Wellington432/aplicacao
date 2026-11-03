@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { Plus, Check, Loader2, Leaf } from 'lucide-react'
+import ProductImage from '@/components/ProductImage'
 import { Produto } from '@/lib/types'
 import { formatPrice } from '@/lib/format'
 import { useCart } from '@/contexts/CartContext'
@@ -47,12 +47,10 @@ export default function ProductCard({ produto }: { produto: Produto }) {
     <div className="group relative flex min-h-[240px] w-full max-w-[304px] flex-col rounded-card border border-card-border bg-white p-3 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-lg sm:min-h-[320px]">
       <div className="relative w-full aspect-square rounded-input overflow-hidden bg-bg-app">
         {produto.banner ? (
-          <Image
+          <ProductImage
             src={produto.banner}
             alt={produto.nome}
-            fill
             sizes="(max-width: 639px) 40vw, (max-width: 1023px) 30vw, 280px"
-            className="object-cover"
           />
         ) : (
           <div

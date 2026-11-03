@@ -28,7 +28,7 @@ describe('CreateProductController.handle', () => {
       preco: 2.5,
       unidade: 'kg',
       descricao: 'Fresca',
-      banner: 'http://localhost/uploads/photo.png',
+      banner: `${process.env.API_URL?.trim().replace(/\/+$/, '') || 'http://localhost'}/uploads/photo.png`,
       id_categoria: 'cat-1',
       estoque: 4,
     });

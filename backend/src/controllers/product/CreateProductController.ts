@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CreateProductServices } from "../../services/product/CreateProdutoServices";
+import { productImageUrl } from "../../utils/productImageUrl";
 
 class CreateProductController {
   async handle(req: Request, res: Response) {
@@ -9,7 +10,7 @@ class CreateProductController {
       return res.status(400).json({ error: 'Imagem é obrigatória.' });
     }
 
-    const banner = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const banner = await productImageUrl(req, req.file);
 
     const createProduct = new CreateProductServices();
     const produto = await createProduct.execute({

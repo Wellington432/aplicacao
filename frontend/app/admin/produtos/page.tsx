@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import ProductImage from '@/components/ProductImage'
 import { AlertTriangle, Plus, Pencil, Trash2, Undo2, Package } from 'lucide-react'
 import AdminShell from '@/components/admin/AdminShell'
 import ProdutoFormModal from '@/components/admin/ProdutoFormModal'
@@ -163,9 +164,7 @@ export default function AdminProdutosPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="relative w-10 h-10 rounded-input overflow-hidden bg-bg-app shrink-0">
-                          {produto.banner && (
-                            <Image src={produto.banner} alt={produto.nome} fill className="object-cover" />
-                          )}
+                          <ProductImage src={produto.banner} alt={produto.nome} sizes="40px" />
                         </div>
                         <div className="min-w-0">
                           <p className="font-medium text-ink-800 truncate max-w-[160px] sm:max-w-[240px]">
