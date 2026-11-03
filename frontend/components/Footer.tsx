@@ -1,4 +1,5 @@
 import { Facebook, Instagram, MessageCircle } from 'lucide-react'
+import { contactInfo } from '@/lib/contact'
 
 const socialLinks = [
   {
@@ -14,10 +15,10 @@ const socialLinks = [
     text: 'Facebook',
   },
   {
-    href: 'https://wa.me/5517997384348',
-    label: 'Telefone/WhatsApp da ETEC Jales: (17) 99738-4348',
+    href: contactInfo.whatsappHref,
+    label: `Telefone/WhatsApp da ETEC Jales: ${contactInfo.phone}`,
     Icon: MessageCircle,
-    text: '(17) 99738-4348',
+    text: contactInfo.phone,
   },
 ]
 

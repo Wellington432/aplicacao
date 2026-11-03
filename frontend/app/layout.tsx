@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import Providers from '@/components/Providers'
-import Footer from '@/components/Footer'
+import ConditionalFooter from '@/components/ConditionalFooter'
 import './globals.css'
 
 const poppins = Poppins({
@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="flex flex-1 flex-col">
           <Providers>{children}</Providers>
         </div>
-        <Footer />
+        <ConditionalFooter />
       </body>
     </html>
   )
