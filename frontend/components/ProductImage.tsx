@@ -1,9 +1,9 @@
 'use client'
 
+/* eslint-disable @next/next/no-img-element */
 import { useState } from 'react'
-import Image from 'next/image'
 import { Leaf } from 'lucide-react'
-import { normalizeImageUrl } from '@/lib/imageUrl'
+import { getImageUrl } from '@/lib/imageUrl'
 
 interface ProductImageProps {
   src: string | null | undefined
@@ -18,7 +18,7 @@ export default function ProductImage({
   sizes = '100vw',
   className = 'object-cover',
 }: ProductImageProps) {
-  const normalizedSrc = normalizeImageUrl(src)
+  const normalizedSrc = getImageUrl(src)
   const [failedSrc, setFailedSrc] = useState<string | null>(null)
 
   if (!normalizedSrc || failedSrc === normalizedSrc) {
@@ -34,12 +34,13 @@ export default function ProductImage({
   }
 
   return (
-    <Image
+    <img
       src={normalizedSrc}
       alt={alt}
-      fill
       sizes={sizes}
-      className={className}
+      loading="lazy"
+      decoding="async"
+      className={`absolute inset-0 h-full w-full ${className}`}
       onError={() => setFailedSrc(normalizedSrc)}
     />
   )
