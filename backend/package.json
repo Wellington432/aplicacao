@@ -9,7 +9,6 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "make-admin": "ts-node-dev --transpile-only prisma/make-admin.ts",
-    "fix-image-urls": "ts-node-dev --transpile-only prisma/fix-image-urls.ts",
     "test": "node scripts/run-integration-tests.cjs --all",
     "test:unit": "jest --selectProjects unit --runInBand",
     "test:integration": "node scripts/run-integration-tests.cjs",
@@ -36,7 +35,6 @@
   "dependencies": {
     "@prisma/client": "6.13.0",
     "bcryptjs": "^3.0.3",
-    "cloudinary": "^2.11.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.4",
     "express": "^5.2.1",

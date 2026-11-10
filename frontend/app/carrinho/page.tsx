@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import ProductImage from '@/components/ProductImage'
 import { AlertTriangle, Minus, Plus, Trash2, Loader2, MapPin } from 'lucide-react'
 import AppShell from '@/components/AppShell'
 import { useCart } from '@/contexts/CartContext'
@@ -218,7 +217,9 @@ export default function CarrinhoPage() {
                 className="bg-white rounded-card border border-card-border shadow-card p-3 flex flex-wrap items-center gap-4"
               >
                 <div className="relative w-16 h-16 rounded-input overflow-hidden bg-bg-app shrink-0">
-                  <ProductImage src={item.produto.banner} alt={item.produto.nome} sizes="64px" />
+                  {item.produto.banner && (
+                    <Image src={item.produto.banner} alt={item.produto.nome} fill className="object-cover" />
+                  )}
                 </div>
 
                 <div className="flex-1 min-w-[140px]">

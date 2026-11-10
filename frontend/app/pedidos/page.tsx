@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import ProductImage from '@/components/ProductImage'
 import Link from 'next/link'
 import { AlertTriangle, PackageOpen } from 'lucide-react'
 import AppShell from '@/components/AppShell'
@@ -94,7 +93,9 @@ export default function PedidosPage() {
             <div className="flex items-center gap-2 mt-3 overflow-x-auto">
               {pedido.itens.map((item) => (
                 <div key={item.id} className="relative w-12 h-12 rounded-input overflow-hidden bg-bg-app shrink-0">
-                  <ProductImage src={item.produto.banner} alt={item.produto.nome} sizes="48px" />
+                  {item.produto.banner && (
+                    <Image src={item.produto.banner} alt={item.produto.nome} fill className="object-cover" />
+                  )}
                 </div>
               ))}
             </div>

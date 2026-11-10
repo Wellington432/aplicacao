@@ -1,11 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Check, Loader2 } from 'lucide-react'
-import ProductImage from '@/components/ProductImage'
+import Image from 'next/image'
+import { Plus, Check, Loader2, Leaf } from 'lucide-react'
 import { Produto } from '@/lib/types'
 import { formatPrice } from '@/lib/format'
-import { getImageUrl } from '@/lib/imageUrl'
 import { useCart } from '@/contexts/CartContext'
 import { getApiErrorMessage } from '@/lib/api'
 
@@ -27,7 +26,6 @@ export default function ProductCard({ produto }: { produto: Produto }) {
   const [error, setError] = useState('')
 
   const semEstoque = produto.estoque <= 0
-  const imageSrc = getImageUrl(produto.banner)
 
   async function handleAdd() {
     if (semEstoque) return
@@ -48,11 +46,26 @@ export default function ProductCard({ produto }: { produto: Produto }) {
   return (
     <div className="group relative flex min-h-[240px] w-full max-w-[304px] flex-col rounded-card border border-card-border bg-white p-3 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-lg sm:min-h-[320px]">
       <div className="relative w-full aspect-square rounded-input overflow-hidden bg-bg-app">
-        <ProductImage
-          src={imageSrc}
-          alt={produto.nome}
-          sizes="(max-width: 639px) 40vw, (max-width: 1023px) 30vw, 280px"
-        />
+        {produto.banner ? (
+          <Image
+            src={produto.banner}
+            alt={produto.nome}
+            fill
+            sizes="(max-width: 639px) 40vw, (max-width: 1023px) 30vw, 280px"
+            className="object-cover"
+          />
+        ) : (
+          <div
+            className="w-full h-full flex items-center justify-center"
+            style={{
+              backgroundImage:
+                'radial-gradient(rgb(var(--palette-horta-light-rgb) / 0.1) 1.5px, transparent 1.5px)',
+              backgroundSize: '12px 12px',
+            }}
+          >
+            <Leaf className="w-8 h-8 text-horta-medium/40" />
+          </div>
+        )}
       </div>
 
       <h3 className="mt-3 min-h-10 text-sm font-semibold text-ink-800 line-clamp-2">{produto.nome}</h3>

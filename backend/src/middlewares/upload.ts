@@ -2,7 +2,6 @@ import multer from 'multer';
 import path from 'path';
 import crypto from 'crypto';
 import { ClientError } from '../errors/ClientError';
-import { isCloudinaryConfigured } from '../utils/cloudinary';
 
 const ALLOWED_MIMETYPES: Record<string, string> = {
   'image/jpeg': '.jpg',
@@ -11,16 +10,17 @@ const ALLOWED_MIMETYPES: Record<string, string> = {
   'image/gif': '.gif',
 };
 
-const diskStorage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: path.resolve(__dirname, '..', '..', 'uploads'),
   filename: (req, file, cb) => {
+   
     const ext = ALLOWED_MIMETYPES[file.mimetype] ?? '';
     cb(null, `${crypto.randomUUID()}${ext}`);
   },
 });
 
 const upload = multer({
-  storage: isCloudinaryConfigured ? multer.memoryStorage() : diskStorage,
+  storage,
   fileFilter: (req, file, cb) => {
     if (ALLOWED_MIMETYPES[file.mimetype]) {
       cb(null, true);
