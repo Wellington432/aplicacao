@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import { getApiBaseUrl } from '@/lib/apiBaseUrl'
 
 const STORAGE_KEY = '@feiraetec:auth'
 
@@ -30,7 +31,7 @@ export function clearStoredAuth() {
 }
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333',
+  baseURL: getApiBaseUrl(),
 })
 
 api.interceptors.request.use((config) => {
