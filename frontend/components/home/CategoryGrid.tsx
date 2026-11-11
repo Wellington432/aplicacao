@@ -3,15 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Categoria } from '@/lib/types'
-
-function imageForCategoria(nome: string): string {
-  const n = nome.toLowerCase()
-  if (n.includes('hortal') || n.includes('verdura') || n.includes('folha')) return '/produce/icon-folha.png'
-  if (n.includes('fruta')) return '/produce/icon-fruta.png'
-  if (n.includes('tempero') || n.includes('erva') || n.includes('grão') || n.includes('grao')) return '/produce/icon-graos.png'
-  if (n.includes('ovo')) return '/produce/icon-ovos.png'
-  return '/produce/icon-caixa.png'
-}
+import { getCategoryIconSrc } from '@/lib/categoryIcons'
 
 interface CategoryGridProps {
   categorias: Categoria[]
@@ -52,7 +44,7 @@ export default function CategoryGrid({ categorias, loading, activeId, onSelect, 
 
         {!loading &&
           categoriasVisiveis.map((categoria) => {
-            const iconSrc = imageForCategoria(categoria.nome)
+            const iconSrc = getCategoryIconSrc(categoria.nome)
             const active = activeId === categoria.id
             return (
               <button

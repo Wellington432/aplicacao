@@ -1,7 +1,9 @@
 'use client'
 
+import Image from 'next/image'
 import { X } from 'lucide-react'
 import { Categoria } from '@/lib/types'
+import { getCategoryIconSrc } from '@/lib/categoryIcons'
 
 export interface ProductFilters {
   precoMin: string
@@ -72,6 +74,14 @@ export default function FilterPanel({
                   : 'border-input-border text-ink-600 hover:bg-bg-app'
               }`}
             >
+              <Image
+                src={getCategoryIconSrc(categoria.nome)}
+                alt=""
+                width={18}
+                height={18}
+                sizes="18px"
+                className="mr-1 inline-block h-[18px] w-[18px] rounded-full object-cover align-middle"
+              />
               {categoria.nome}
             </button>
           ))}

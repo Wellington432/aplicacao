@@ -1,11 +1,13 @@
 'use client'
 
 import { FormEvent, useEffect, useState } from 'react'
+import Image from 'next/image'
 import { AlertTriangle, Plus, FolderTree } from 'lucide-react'
 import AdminShell from '@/components/admin/AdminShell'
 import { api, getApiErrorMessage } from '@/lib/api'
 import { Categoria } from '@/lib/types'
 import PrimaryButton from '@/components/PrimaryButton'
+import { getCategoryIconSrc } from '@/lib/categoryIcons'
 
 export default function AdminCategoriasPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([])
@@ -93,7 +95,14 @@ export default function AdminCategoriasPage() {
         <div className="bg-white rounded-card border border-card-border shadow-card divide-y divide-card-border max-w-lg">
           {categorias.map((categoria) => (
             <div key={categoria.id} className="px-4 py-3 flex items-center gap-3">
-              <FolderTree className="w-4 h-4 text-horta-medium shrink-0" />
+              <Image
+                src={getCategoryIconSrc(categoria.nome)}
+                alt=""
+                width={20}
+                height={20}
+                sizes="20px"
+                className="h-5 w-5 shrink-0 rounded-full object-cover"
+              />
               <span className="text-sm text-ink-700">{categoria.nome}</span>
             </div>
           ))}
