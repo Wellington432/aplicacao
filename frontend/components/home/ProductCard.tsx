@@ -24,8 +24,10 @@ export default function ProductCard({ produto }: { produto: Produto }) {
   const [adding, setAdding] = useState(false)
   const [added, setAdded] = useState(false)
   const [error, setError] = useState('')
+  const [failedBanner, setFailedBanner] = useState<string | null>(null)
 
   const semEstoque = produto.estoque <= 0
+  const showBanner = Boolean(produto.banner) && failedBanner !== produto.banner
 
   async function handleAdd() {
     if (semEstoque) return
@@ -46,13 +48,14 @@ export default function ProductCard({ produto }: { produto: Produto }) {
   return (
     <div className="group relative flex min-h-[240px] w-full max-w-[304px] flex-col rounded-card border border-card-border bg-white p-3 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-lg sm:min-h-[320px]">
       <div className="relative w-full aspect-square rounded-input overflow-hidden bg-bg-app">
-        {produto.banner ? (
+        {showBanner ? (
           <Image
             src={produto.banner}
             alt={produto.nome}
             fill
-            sizes="(max-width: 639px) 40vw, (max-width: 1023px) 30vw, 280px"
+            sizes="(max-width: 359px) 85vw, (max-width: 639px) 40vw, (max-width: 1023px) 30vw, 280px"
             className="object-cover"
+            onError={() => setFailedBanner(produto.banner)}
           />
         ) : (
           <div
