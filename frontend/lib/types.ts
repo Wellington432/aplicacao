@@ -24,7 +24,6 @@ export interface Categoria {
   id: string
   nome: string
   iconKey?: string | null
-  iconUrl?: string | null
 }
 
 export interface Produto {

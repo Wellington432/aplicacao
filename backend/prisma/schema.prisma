@@ -76,7 +76,6 @@ model Categoria {
   id            String   @id @default(uuid())
   nome          String
   iconKey       String?
-  iconUrl       String?
   criado_em     DateTime @default(now())
   modificado_em DateTime @updatedAt
   produtos      Produto[]

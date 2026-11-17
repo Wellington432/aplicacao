@@ -1,30 +1,21 @@
 export const CATEGORY_ICON_OPTIONS = [
-  { key: 'folhas', defaultName: 'Hortaliças', src: '/produce/icon-folha.png' },
-  { key: 'frutas', defaultName: 'Frutas', src: '/produce/icon-fruta.png' },
-  { key: 'legumes', defaultName: 'Legumes', src: '/produce/cenouras.png' },
-  { key: 'doces', defaultName: 'Doces', src: '/category-icons/doces.svg' },
-  { key: 'laticinios', defaultName: 'Laticínios', src: '/category-icons/laticinios.svg' },
-  { key: 'paes-bolos', defaultName: 'Pães e Bolos', src: '/category-icons/paes-bolos.svg' },
-  { key: 'mel', defaultName: 'Mel', src: '/category-icons/mel.svg' },
-  { key: 'geleias-conservas', defaultName: 'Geleias e Conservas', src: '/category-icons/geleias-conservas.svg' },
-  { key: 'temperos-ervas', defaultName: 'Temperos e Ervas', src: '/category-icons/temperos-ervas.svg' },
-  { key: 'graos-cereais', defaultName: 'Grãos e Cereais', src: '/category-icons/graos-cereais.svg' },
-  { key: 'bebidas-sucos', defaultName: 'Bebidas e Sucos', src: '/category-icons/bebidas-sucos.svg' },
-  { key: 'carnes', defaultName: 'Carnes', src: '/category-icons/carnes.svg' },
-  { key: 'peixes', defaultName: 'Peixes', src: '/category-icons/peixes.svg' },
-  { key: 'ovos', defaultName: 'Ovos', src: '/category-icons/ovos.svg' },
+  { key: 'folhas', label: 'Hortaliças', src: '/produce/icon-folha.png' },
+  { key: 'frutas', label: 'Frutas', src: '/produce/icon-fruta.png' },
+  { key: 'legumes', label: 'Legumes', src: '/produce/cenouras.png' },
+  { key: 'doces', label: 'Doces', src: '/category-icons/doces.svg' },
+  { key: 'laticinios', label: 'Laticínios', src: '/category-icons/laticinios.svg' },
+  { key: 'paes-bolos', label: 'Pães e Bolos', src: '/category-icons/paes-bolos.svg' },
+  { key: 'mel', label: 'Mel', src: '/category-icons/mel.svg' },
+  { key: 'geleias-conservas', label: 'Geleias e Conservas', src: '/category-icons/geleias-conservas.svg' },
+  { key: 'temperos-ervas', label: 'Temperos e Ervas', src: '/category-icons/temperos-ervas.svg' },
+  { key: 'graos-cereais', label: 'Grãos e Cereais', src: '/category-icons/graos-cereais.svg' },
+  { key: 'bebidas-sucos', label: 'Bebidas e Sucos', src: '/category-icons/bebidas-sucos.svg' },
+  { key: 'carnes', label: 'Carnes', src: '/category-icons/carnes.svg' },
+  { key: 'peixes', label: 'Peixes', src: '/category-icons/peixes.svg' },
+  { key: 'ovos', label: 'Ovos', src: '/category-icons/ovos.svg' },
 ] as const
 
 export type CategoryIconKey = (typeof CATEGORY_ICON_OPTIONS)[number]['key']
-
-export function normalizeCategoryNameForComparison(name: string): string {
-  return name
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, ' ')
-}
 
 const aliases: Record<CategoryIconKey, string[]> = {
   folhas: ['hortalica', 'verdura', 'folha'],
@@ -78,9 +69,7 @@ export function getCategoryIconKey(name: string): CategoryIconKey | undefined {
   return orderedAliases.find(({ alias }) => matchesAlias(name, alias))?.key
 }
 
-export function getCategoryIconSrc(name: string, iconKey?: string | null, iconUrl?: string | null): string {
-  if (iconUrl) return iconUrl
-
+export function getCategoryIconSrc(name: string, iconKey?: string | null): string {
   const selectedIcon = CATEGORY_ICON_OPTIONS.find((option) => option.key === iconKey)
     ?? CATEGORY_ICON_OPTIONS.find((option) => option.key === getCategoryIconKey(name))
 

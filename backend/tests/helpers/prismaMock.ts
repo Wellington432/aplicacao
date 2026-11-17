@@ -1,12 +1,7 @@
 const mockMethod = () => jest.fn();
 
 const mockPrisma = {
-  categoria: {
-    create: mockMethod(),
-    findMany: mockMethod(),
-    findUniqueOrThrow: mockMethod(),
-    update: mockMethod(),
-  },
+  categoria: { create: mockMethod(), findMany: mockMethod() },
   produto: {
     create: mockMethod(),
     findMany: mockMethod(),
