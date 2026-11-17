@@ -80,7 +80,7 @@ export default function FilterPanel({
                 width={18}
                 height={18}
                 sizes="18px"
-                className="mr-1 inline-block h-[18px] w-[18px] rounded-full object-cover align-middle"
+                className="mr-1 inline-block h-[18px] w-[18px] rounded-full object-contain align-middle"
               />
               {categoria.nome}
             </button>

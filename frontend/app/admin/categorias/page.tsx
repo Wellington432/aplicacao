@@ -190,7 +190,7 @@ export default function AdminCategoriasPage() {
                 width={20}
                 height={20}
                 sizes="20px"
-                className="h-5 w-5 shrink-0 rounded-full object-cover"
+                className="h-5 w-5 shrink-0 rounded-full object-contain"
               />
               <span className="min-w-0 flex-1 text-sm text-ink-700">{categoria.nome}</span>
               <button

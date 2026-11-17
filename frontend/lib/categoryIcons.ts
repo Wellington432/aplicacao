@@ -1,18 +1,18 @@
 export const CATEGORY_ICON_OPTIONS = [
-  { key: 'folhas', label: 'Hortaliças', src: '/produce/icon-folha.png' },
-  { key: 'frutas', label: 'Frutas', src: '/produce/icon-fruta.png' },
-  { key: 'legumes', label: 'Legumes', src: '/produce/cenouras.png' },
-  { key: 'doces', label: 'Doces', src: '/category-icons/doces.svg' },
-  { key: 'laticinios', label: 'Laticínios', src: '/category-icons/laticinios.svg' },
-  { key: 'paes-bolos', label: 'Pães e Bolos', src: '/category-icons/paes-bolos.svg' },
-  { key: 'mel', label: 'Mel', src: '/category-icons/mel.svg' },
-  { key: 'geleias-conservas', label: 'Geleias e Conservas', src: '/category-icons/geleias-conservas.svg' },
-  { key: 'temperos-ervas', label: 'Temperos e Ervas', src: '/category-icons/temperos-ervas.svg' },
-  { key: 'graos-cereais', label: 'Grãos e Cereais', src: '/category-icons/graos-cereais.svg' },
-  { key: 'bebidas-sucos', label: 'Bebidas e Sucos', src: '/category-icons/bebidas-sucos.svg' },
-  { key: 'carnes', label: 'Carnes', src: '/category-icons/carnes.svg' },
-  { key: 'peixes', label: 'Peixes', src: '/category-icons/peixes.svg' },
-  { key: 'ovos', label: 'Ovos', src: '/category-icons/ovos.svg' },
+  { key: 'folhas', label: 'Hortaliças', src: '/category-icons/salad.svg' },
+  { key: 'frutas', label: 'Frutas', src: '/category-icons/apple.svg' },
+  { key: 'legumes', label: 'Legumes', src: '/category-icons/carrot.svg' },
+  { key: 'doces', label: 'Doces', src: '/category-icons/cake.svg' },
+  { key: 'laticinios', label: 'Laticínios', src: '/category-icons/milk.svg' },
+  { key: 'paes-bolos', label: 'Pães e Bolos', src: '/category-icons/croissant.svg' },
+  { key: 'mel', label: 'Mel', src: '/category-icons/droplet.svg' },
+  { key: 'geleias-conservas', label: 'Geleias e Conservas', src: '/category-icons/cylinder.svg' },
+  { key: 'temperos-ervas', label: 'Temperos e Ervas', src: '/category-icons/leaf.svg' },
+  { key: 'graos-cereais', label: 'Grãos e Cereais', src: '/category-icons/wheat.svg' },
+  { key: 'bebidas-sucos', label: 'Bebidas e Sucos', src: '/category-icons/cup-soda.svg' },
+  { key: 'carnes', label: 'Carnes', src: '/category-icons/beef.svg' },
+  { key: 'peixes', label: 'Peixes', src: '/category-icons/fish.svg' },
+  { key: 'ovos', label: 'Ovos', src: '/category-icons/egg.svg' },
 ] as const
 
 export type CategoryIconKey = (typeof CATEGORY_ICON_OPTIONS)[number]['key']
@@ -73,5 +73,5 @@ export function getCategoryIconSrc(name: string, iconKey?: string | null): strin
   const selectedIcon = CATEGORY_ICON_OPTIONS.find((option) => option.key === iconKey)
     ?? CATEGORY_ICON_OPTIONS.find((option) => option.key === getCategoryIconKey(name))
 
-  return selectedIcon?.src ?? '/produce/icon-folha.png'
+  return selectedIcon?.src ?? '/category-icons/sprout.svg'
 }
