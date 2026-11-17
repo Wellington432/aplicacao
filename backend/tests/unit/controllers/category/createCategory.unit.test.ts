@@ -7,14 +7,15 @@ import { CreateCategoryService } from '../../../../src/services/category/CreateC
 import { createRequest, createResponse } from '../../../helpers/httpMocks';
 
 describe('CreateCategoryController.handle', () => {
-  it('deve encaminhar nome ao serviço e retornar a categoria criada', async () => {
+  it('deve encaminhar nome e ícone ao serviço e retornar a categoria criada', async () => {
     const res = createResponse();
     await new CreateCategoryController().handle(
-      createRequest({ body: { nome: 'Frutas' } }),
+      createRequest({ body: { nome: 'Frutas', iconKey: 'frutas' } }),
       res,
     );
     expect((CreateCategoryService as jest.Mock).mock.results[0].value.execute).toHaveBeenCalledWith({
       nome: 'Frutas',
+      iconKey: 'frutas',
     });
     expect(res.json).toHaveBeenCalledWith({ id: 'cat-1' });
   });

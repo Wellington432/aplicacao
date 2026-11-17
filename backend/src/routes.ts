@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import { CreateUserController } from './controllers/user/CreateUserController';
 import { CreateCategoryController } from './controllers/category/CreateCategoryController';
 import { ListCategoryController } from './controllers/category/ListCategoryController';
+import { UpdateCategoryController } from './controllers/category/UpdateCategoryController';
 import { ListUserByIdController } from './controllers/user/ListUserByIdController';
 import { AuthUserController } from './controllers/user/AuthUserController';
 import { AuthGoogleUserController } from './controllers/user/AuthGoogleUserController';
@@ -70,6 +71,7 @@ router.get('/endereco/:cep', enderecoController.buscarCep.bind(enderecoControlle
 
 //edpoints para categoria
 router.post('/novacategoria', isAuthenticated, isAdmin, new CreateCategoryController().handle);
+router.put('/atualizacategoria', isAuthenticated, isAdmin, new UpdateCategoryController().handle);
 router.get('/listcategoria', isAuthenticated, new ListCategoryController().handle);
 
 //edpoints para produto

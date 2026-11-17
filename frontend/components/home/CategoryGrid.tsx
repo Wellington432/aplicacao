@@ -44,7 +44,7 @@ export default function CategoryGrid({ categorias, loading, activeId, onSelect, 
 
         {!loading &&
           categoriasVisiveis.map((categoria) => {
-            const iconSrc = getCategoryIconSrc(categoria.nome)
+            const iconSrc = getCategoryIconSrc(categoria.nome, categoria.iconKey)
             const active = activeId === categoria.id
             return (
               <button
@@ -60,7 +60,7 @@ export default function CategoryGrid({ categorias, loading, activeId, onSelect, 
                     active ? 'border-horta-medium bg-horta-medium/5' : 'border-card-border'
                   }`}
                 >
-                  <Image src={iconSrc} alt="" fill sizes="180px" className="object-contain p-3" />
+                  <Image src={iconSrc} alt="" fill sizes="(max-width: 639px) 42vw, 180px" className="object-contain p-3" />
                 </div>
                 <span
                   className={`line-clamp-2 min-h-8 text-center text-xs font-medium leading-tight ${

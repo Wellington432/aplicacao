@@ -1,29 +1,24 @@
-import prismaClient from "../../prisma";
+import prismaClient from '../../prisma';
 
-interface CreateCategoryRequest{
-    nome: string;
+interface CreateCategoryRequest {
+  nome: string;
+  iconKey?: string;
 }
 
-class CreateCategoryService{
+class CreateCategoryService {
+  async execute({ nome, iconKey }: CreateCategoryRequest) {
+    if (!nome?.trim()) {
+      throw new Error('Dados ausentes!');
+    }
 
-     async execute ({nome}: CreateCategoryRequest){
-
-        if(!nome){
-            throw new Error("Dados ausentes!")
-        }
-
-        const category = await prismaClient.categoria.create({
-            data:{
-                nome:nome
-            },
-
-            select:{
-                id:true
-            }
-        });
-
-        return category;
-     }
+    return prismaClient.categoria.create({
+      data: {
+        nome: nome.trim(),
+        iconKey: iconKey?.trim() || null,
+      },
+      select: { id: true, nome: true, iconKey: true },
+    });
+  }
 }
 
-export {CreateCategoryService}
+export { CreateCategoryService };

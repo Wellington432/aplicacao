@@ -5,12 +5,12 @@ describe('CreateCategoryService.execute', () => {
   it('deve criar categoria com o nome informado', async () => {
     (prisma.categoria.create as jest.Mock).mockResolvedValue({ id: 'category-1' });
 
-    await expect(new CreateCategoryService().execute({ nome: 'Frutas' })).resolves.toEqual({
+    await expect(new CreateCategoryService().execute({ nome: ' Frutas ', iconKey: 'frutas' })).resolves.toEqual({
       id: 'category-1',
     });
     expect(prisma.categoria.create).toHaveBeenCalledWith({
-      data: { nome: 'Frutas' },
-      select: { id: true },
+      data: { nome: 'Frutas', iconKey: 'frutas' },
+      select: { id: true, nome: true, iconKey: true },
     });
   });
 
@@ -19,6 +19,16 @@ describe('CreateCategoryService.execute', () => {
       'Dados ausentes!',
     );
     expect(prisma.categoria.create).not.toHaveBeenCalled();
+  });
+
+  it('deve aceitar categoria sem ícone para manter compatibilidade com clientes antigos', async () => {
+    (prisma.categoria.create as jest.Mock).mockResolvedValue({ id: 'category-1' });
+    await new CreateCategoryService().execute({ nome: 'Frutas' });
+
+    expect(prisma.categoria.create).toHaveBeenCalledWith({
+      data: { nome: 'Frutas', iconKey: null },
+      select: { id: true, nome: true, iconKey: true },
+    });
   });
 
   it('deve propagar erro do Prisma', async () => {

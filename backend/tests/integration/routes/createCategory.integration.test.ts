@@ -9,11 +9,13 @@ describe('POST /novacategoria', () => {
     const response = await request(app)
       .post('/novacategoria')
       .set(authHeader(admin))
-      .send({ nome: 'Categoria integração' });
+      .send({ nome: 'Categoria integração', iconKey: 'doces' });
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('id');
-    await expect(prisma.categoria.findUnique({ where: { id: response.body.id } })).resolves.toBeTruthy();
+    await expect(prisma.categoria.findUnique({ where: { id: response.body.id } })).resolves.toMatchObject({
+      iconKey: 'doces',
+    });
   });
 
   it('deve bloquear cliente autenticado', async () => {

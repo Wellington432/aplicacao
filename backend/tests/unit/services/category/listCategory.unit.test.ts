@@ -8,7 +8,7 @@ describe('ListCategoryService.execute', () => {
 
     await expect(new ListCategoryService().execute()).resolves.toBe(categorias);
     expect(prisma.categoria.findMany).toHaveBeenCalledWith({
-      select: { id: true, nome: true },
+      select: { id: true, nome: true, iconKey: true },
       orderBy: { nome: 'asc' },
     });
   });

@@ -75,6 +75,7 @@ model Endereco {
 model Categoria {
   id            String   @id @default(uuid())
   nome          String
+  iconKey       String?
   criado_em     DateTime @default(now())
   modificado_em DateTime @updatedAt
   produtos      Produto[]

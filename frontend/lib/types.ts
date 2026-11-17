@@ -23,6 +23,7 @@ export interface AuthResponse extends Usuario {
 export interface Categoria {
   id: string
   nome: string
+  iconKey?: string | null
 }
 
 export interface Produto {
