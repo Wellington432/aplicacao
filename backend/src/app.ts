@@ -49,7 +49,11 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
   }
 
   if (err instanceof MulterError) {
-    const msg = err.code === 'LIMIT_FILE_SIZE' ? 'Arquivo muito grande (máx. 5MB).' : 'Erro no envio do arquivo.';
+    const categoryIconRoute = req.path === '/novacategoria' || req.path === '/atualizacategoria';
+    const maxSizeLabel = categoryIconRoute ? '1 MB' : 'permitido';
+    const msg = err.code === 'LIMIT_FILE_SIZE'
+      ? `Arquivo muito grande (máx. ${maxSizeLabel}).`
+      : 'Erro no envio do arquivo.';
     return res.status(400).json({ error: msg });
   }
 

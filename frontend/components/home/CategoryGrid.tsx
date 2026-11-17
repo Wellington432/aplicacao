@@ -44,7 +44,7 @@ export default function CategoryGrid({ categorias, loading, activeId, onSelect, 
 
         {!loading &&
           categoriasVisiveis.map((categoria) => {
-            const iconSrc = getCategoryIconSrc(categoria.nome, categoria.iconKey)
+            const iconSrc = getCategoryIconSrc(categoria.nome, categoria.iconKey, categoria.iconUrl)
             const active = activeId === categoria.id
             return (
               <button

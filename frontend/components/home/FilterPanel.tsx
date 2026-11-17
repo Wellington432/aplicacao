@@ -75,7 +75,7 @@ export default function FilterPanel({
               }`}
             >
               <Image
-                src={getCategoryIconSrc(categoria.nome, categoria.iconKey)}
+                src={getCategoryIconSrc(categoria.nome, categoria.iconKey, categoria.iconUrl)}
                 alt=""
                 width={18}
                 height={18}

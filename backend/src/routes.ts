@@ -9,7 +9,7 @@ import { AuthUserController } from './controllers/user/AuthUserController';
 import { AuthGoogleUserController } from './controllers/user/AuthGoogleUserController';
 import { isAuthenticated } from './middlewares/isAuthenticated';
 import { isAdmin } from './middlewares/isAdmin';
-import { upload } from './middlewares/upload';
+import { upload, uploadCategoryIcon } from './middlewares/upload';
 import { uploadComprovante  } from './middlewares/multerConfig'; 
 import { CreateProductController } from './controllers/product/CreateProductController';
 import { ListProductController } from './controllers/product/ListProductController';
@@ -70,8 +70,8 @@ router.post('/endereco', isAuthenticated, enderecoController.salvar.bind(enderec
 router.get('/endereco/:cep', enderecoController.buscarCep.bind(enderecoController));
 
 //edpoints para categoria
-router.post('/novacategoria', isAuthenticated, isAdmin, new CreateCategoryController().handle);
-router.put('/atualizacategoria', isAuthenticated, isAdmin, new UpdateCategoryController().handle);
+router.post('/novacategoria', isAuthenticated, isAdmin, uploadCategoryIcon.single('icon'), new CreateCategoryController().handle);
+router.put('/atualizacategoria', isAuthenticated, isAdmin, uploadCategoryIcon.single('icon'), new UpdateCategoryController().handle);
 router.get('/listcategoria', isAuthenticated, new ListCategoryController().handle);
 
 //edpoints para produto
