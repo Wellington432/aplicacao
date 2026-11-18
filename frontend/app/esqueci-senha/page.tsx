@@ -19,12 +19,19 @@ export default function EsqueciSenhaPage() {
     event.preventDefault()
     setErro('')
     setCarregando(true)
+    const controller = new AbortController()
+    const timeoutId = window.setTimeout(() => controller.abort(), 20000)
     try {
-      await api.post('/senha/recuperar', { email })
+      await api.post('/senha/recuperar', { email }, { signal: controller.signal })
       setEnviado(true)
     } catch (error) {
-      setErro(getApiErrorMessage(error, 'Não foi possível solicitar a recuperação.'))
+      if (controller.signal.aborted) {
+        setErro('Não foi possível enviar o e-mail agora. Tente novamente em alguns minutos.')
+      } else {
+        setErro(getApiErrorMessage(error, 'Não foi possível solicitar a recuperação.'))
+      }
     } finally {
+      window.clearTimeout(timeoutId)
       setCarregando(false)
     }
   }

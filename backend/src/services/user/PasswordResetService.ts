@@ -34,6 +34,9 @@ function criarTransportadorEmail() {
       host,
       port,
       secure: process.env.SMTP_SECURE === 'true' || port === 465,
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
       ...(usuario && senha ? { auth: { user: usuario, pass: senha } } : {}),
     }),
   };
