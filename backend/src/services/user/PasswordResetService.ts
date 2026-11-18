@@ -7,6 +7,13 @@ import { normalizarEmail } from '../../utils/token';
 const TEMPO_EXPIRACAO_MS = 30 * 60 * 1000;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+class ConfiguracaoEmailError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ConfiguracaoEmailError';
+  }
+}
+
 function criarTransportadorEmail() {
   const host = process.env.SMTP_HOST?.trim();
   const remetente = process.env.SMTP_FROM?.trim();
@@ -15,10 +22,10 @@ function criarTransportadorEmail() {
   const senha = process.env.SMTP_PASS;
 
   if (!host || !remetente || !Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new Error('Configure SMTP_HOST, SMTP_PORT e SMTP_FROM para habilitar a recuperação.');
+    throw new ConfiguracaoEmailError('Configure SMTP_HOST, SMTP_PORT e SMTP_FROM para habilitar a recuperação.');
   }
   if (Boolean(usuario) !== Boolean(senha)) {
-    throw new Error('Configure SMTP_USER e SMTP_PASS juntos.');
+    throw new ConfiguracaoEmailError('Configure SMTP_USER e SMTP_PASS juntos.');
   }
 
   return {
@@ -52,7 +59,7 @@ class PasswordResetService {
     const tokenHash = criarHashToken(token);
     const expiraEm = new Date(Date.now() + TEMPO_EXPIRACAO_MS);
     const frontendUrl = process.env.FRONTEND_URL?.split(',')[0]?.trim();
-    if (!frontendUrl) throw new Error('Configure FRONTEND_URL para enviar links de recuperação.');
+    if (!frontendUrl) throw new ConfiguracaoEmailError('Configure FRONTEND_URL para enviar links de recuperação.');
 
     await prismaClient.$transaction([
       prismaClient.recuperacaoSenha.deleteMany({ where: { id_usuario: usuario.id } }),
